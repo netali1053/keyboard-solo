@@ -35,7 +35,6 @@ document.addEventListener('keydown', (event) => {
 
         invalidCharacter++
         wordMistakes.textContent = invalidCharacter;
-
     } else {
         spans[counter].classList.remove('w');
         spans[counter].classList.add('c');
@@ -43,27 +42,8 @@ document.addEventListener('keydown', (event) => {
     }
 
     if (counter === spans.length) {
-        wordContainer.innerHTML = "";
-        wordNow = generateWord();
-        spanWord(wordNow);
-        counter = 0;
-
-        if (invalidCharacter) {
-            invalidWords++;
-            wrongCount.textContent = invalidWords;
-
-            correctWords++;
-            correctCount.textContent = correctWords;
-        } else {
-            correctWords++;
-            correctCount.textContent = correctWords;
-        }
-
-        if (correctCount.textContent === '5') {
-            showMessage(`Победа! Ваше время ${timer.textContent}`);
-        } else if (wrongCount.textContent === '5') {
-            showMessage(`Увы! Ваше время ${timer.textContent}`);
-        }
+        updateCounters();
+        nextWord();
     }
 });
 
@@ -74,14 +54,21 @@ function showMessage(text) {
 
 function reset() {
     counter = 0;
+    invalidCharacter = 0;
     wordMistakes.textContent = '0';
+    correctWords = -1;
     correctCount.textContent = '0';
+    invalidWords = 0;
     wrongCount.textContent = '0';
     wordContainer.innerHTML = "";
     wordNow = generateWord();
     spanWord(wordNow);
     clearInterval(timerId);
+    createStringTime();
+    timeLeft = 0;
     timer.textContent = '00:00';
+    updateCounters();
+    startTimer();
 }
 
 function createStringTime() {
@@ -109,4 +96,36 @@ function startTimer() {
 
         timeLeft++;
     }, 1000);
+};
+
+function updateCounters() {
+    if (invalidCharacter) {
+        invalidWords++;
+        wrongCount.textContent = invalidWords;
+
+    } else {
+        correctWords++;
+        correctCount.textContent = correctWords;
+    }
+};
+
+function nextWord() {
+    setTimeout(() => {
+        wordContainer.innerHTML = "";
+        wordNow = generateWord();
+        spanWord(wordNow);
+        counter = 0;
+        invalidCharacter = 0;
+        wordMistakes.textContent = invalidCharacter;
+
+        cheakGameOver();
+    }, 0);
+};
+
+function cheakGameOver() {
+    if (correctCount.textContent === '5') {
+        showMessage(`Победа! Ваше время ${timer.textContent}`);
+    } else if (wrongCount.textContent === '5') {
+        showMessage(`Увы! Ваше время ${timer.textContent}`);
+    }
 };
