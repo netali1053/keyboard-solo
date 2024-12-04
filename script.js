@@ -43,7 +43,7 @@ document.addEventListener('keydown', (event) => {
 
     if (counter === spans.length) {
         updateCounters();
-        nextWord();
+        setTimeout(nextWord, 0);
     }
 });
 
@@ -110,16 +110,14 @@ function updateCounters() {
 };
 
 function nextWord() {
-    setTimeout(() => {
-        wordContainer.innerHTML = "";
-        wordNow = generateWord();
-        spanWord(wordNow);
-        counter = 0;
-        invalidCharacter = 0;
-        wordMistakes.textContent = invalidCharacter;
+    wordContainer.innerHTML = "";
+    wordNow = generateWord();
+    spanWord(wordNow);
+    counter = 0;
+    invalidCharacter = 0;
+    wordMistakes.textContent = invalidCharacter;
 
-        cheakGameOver();
-    }, 0);
+    cheakGameOver();
 };
 
 function cheakGameOver() {
